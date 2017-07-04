@@ -2,16 +2,16 @@ package services
 
 import "math/rand"
 
-// A service providing a random number
+// RandomNumberService generates a random number using a seed
 type RandomNumberService interface {
 	GenerateRandomNumber(int) int
 }
 
-// Default implementation of RandomNumberService
+// DefaultRandomNumberService is the default implementation of RandomNumberService
 type DefaultRandomNumberService struct {
 }
 
-// Generates a random number
+// GenerateRandomNumber generates a random number
 func (rns *DefaultRandomNumberService) GenerateRandomNumber(seed int) int {
 	rand.Seed(int64(seed))
 	return rand.Int()

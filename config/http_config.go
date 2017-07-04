@@ -5,11 +5,11 @@ import (
 	"net/http"
 )
 
-// A HTTP endpoint handler
+// Handler is a HTTP endpoint handler
 type Handler func(w http.ResponseWriter, r *http.Request)
 
-// Abstraction from a HTTP server
-type HttpServer interface {
+// HTTPServer is an abstraction from a HTTP server
+type HTTPServer interface {
 	// Registers a HTTP Endpoint
 	RegisterEndpoint(endpoint string, handler Handler)
 
@@ -17,7 +17,8 @@ type HttpServer interface {
 	Run()
 }
 
-type DefaultHttpServer struct {
+// DefaultHTTPServer is the default implementation of HTTPServer
+type DefaultHTTPServer struct {
 	// The struct logger
 	logger Logger
 
@@ -25,18 +26,21 @@ type DefaultHttpServer struct {
 	Port int
 }
 
-func (dhs DefaultHttpServer) RegisterEndpoint(endpoint string, handler Handler) {
+// RegisterEndpoint registers a Handler to a specific endpoint
+func (dhs DefaultHTTPServer) RegisterEndpoint(endpoint string, handler Handler) {
 	dhs.logger.Debug(fmt.Sprintf("Registering handler on endpoint '%s'", endpoint))
 	http.HandleFunc(endpoint, handler)
 }
 
-func (dhs DefaultHttpServer) Run() {
+// Run runs the HTTP server
+func (dhs DefaultHTTPServer) Run() {
 	dhs.logger.Info(fmt.Sprintf("Starting HTTP server on port '%d'...", dhs.Port))
 	http.ListenAndServe(fmt.Sprintf(":%d", dhs.Port), nil)
 }
 
-func NewDefaultHttpServer(port int) *DefaultHttpServer {
-	return &DefaultHttpServer{
+// NewDefaultHTTPServer creates a new DefaultHttpServer
+func NewDefaultHTTPServer(port int) *DefaultHTTPServer {
+	return &DefaultHTTPServer{
 		logger: NewLogger(),
 		Port:   port,
 	}

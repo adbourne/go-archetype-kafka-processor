@@ -8,41 +8,41 @@ import (
 )
 
 const (
-	// Environment variable of the HTTP port to use
+	// EnvVarPort is the environment variable of the HTTP port to use
 	EnvVarPort = "REST_ARCHETYPE_PORT"
 
-	// Environment variable for the random seed to use
+	// EnvVarRandomSeed is the environment variable for the random seed to use
 	EnvVarRandomSeed = "REST_ARCHETYPE_RANDOM_SEED"
 
-	// Environment variable for the comma delimited list of kafka brokers
+	// EnvVarKafkaBrokers is the environment variable for the comma delimited list of kafka brokers
 	EnvVarKafkaBrokers = "REST_ARCHETYPE_KAFKA_BROKERS"
 
-	// Environment variable for the source Kafka topic
+	// EnvVarSourceTopic is the environment variable for the source Kafka topic
 	EnvVarSourceTopic = "REST_ARCHETYPE_SOURCE_TOPIC"
 
-	// Environment variable for the Kafka sink topic
+	// EnvVarSinkTopic is the environment variable for the Kafka sink topic
 	EnvVarSinkTopic = "REST_ARCHETYPE_SINK_TOPIC"
 )
 
-// The application configuration
+// AppConfig is the application configuration
 type AppConfig struct {
-	// The port to run the rest server on
+	// Port is the port to run the rest server on
 	Port int
 
-	// The seed to use when generating randomness
+	// RandomSeed is the seed to use when generating randomness
 	RandomSeed int64
 
-	// The comma delimited list of kafka brokers
+	// Brokers is the comma delimited list of kafka brokers
 	Brokers string
 
-	// The name of the Kafka source topic
+	// SourceTopic is the name of the Kafka source topic
 	SourceTopic string
 
-	// The name of the Kafka sink topic
+	// SinkTopic is the name of the Kafka sink topic
 	SinkTopic string
 }
 
-// Constructs a new AppConfig
+// NewAppConfig constructs a new AppConfig
 func NewAppConfig() AppConfig {
 	return AppConfig{
 		Port:        loadEnvVarAsInt(EnvVarPort, 8080),
@@ -53,12 +53,12 @@ func NewAppConfig() AppConfig {
 	}
 }
 
-// Splits the comma delimited broker string into a slice of brokers
+// GetBrokerList splits the comma delimited broker string into a slice of brokers
 func (c *AppConfig) GetBrokerList() []string {
 	return strings.Split(c.Brokers, ",")
 }
 
-// Utility function for loading an environment variable or use a default
+// loadEnvVarAsInt is a utility function for loading an environment variable or use a default
 func loadEnvVarAsInt(envVarName string, defaultVal int) int {
 	ev, isFound := os.LookupEnv(envVarName)
 	if !isFound {
@@ -76,7 +76,7 @@ func loadEnvVarAsInt(envVarName string, defaultVal int) int {
 	return evi
 }
 
-// Utility function for loading an environment variable or using a default
+// loadEnvVarAsString is a utility function for loading an environment variable or using a default
 func loadEnvVarAsString(envVarName string, defaultVal string) string {
 	ev, isFound := os.LookupEnv(envVarName)
 	if !isFound {

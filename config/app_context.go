@@ -4,20 +4,20 @@ import (
 	"github.com/adbourne/go-archetype-rest/services"
 )
 
-// The application context
+// AppContext is the application context
 type AppContext struct {
-	// The application config
-	AppConfig AppConfig
+	// AppConfig is the application config
+	AppConfig           AppConfig
 
-	// The random number service
+	// RandomNumberService is the random number service
 	RandomNumberService services.RandomNumberService
 
-	// The Kafka client
-	KafkaClient KafkaClient
+	// KafkaClient is the Kafka client
+	KafkaClient         KafkaClient
 
-	// The Kafka Processor
-	KafkaProcessor KafkaProcessor
+	// KafkaProcessor is the Kafka Processor
+	KafkaProcessor      KafkaProcessor
 
-	// The HTTP server
-	HttpServer HttpServer
+	// HTTPServer is the HTTP server
+	HTTPServer          HTTPServer
 }

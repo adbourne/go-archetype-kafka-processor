@@ -10,26 +10,26 @@ import (
 	"time"
 )
 
-// A KafkaProcessor turns a Source Message into a Sink Message
+// KafkaProcessor turns a Source Message into a Sink Message
 type KafkaProcessor interface {
 	Process(messages.SourceMessage) messages.SinkMessage
 }
 
-// Abstraction away from the kafka client implementation
+// KafkaClient is an abstraction away from the kafka client implementation
 type KafkaClient interface {
-	// Registers a Kafka Processor
+	// RegisterProcessor registers a Kafka Processor
 	RegisterProcessor(kp KafkaProcessor)
 
-	// Uses the registered KafkaProcessor to processes messages from the
+	// Process uses the registered KafkaProcessor to processes messages from the
 	// source topic and publish to the sink topic
 	// returns an error if no KafkaProcessor is registered
 	Process() error
 
-	// Closes the connection to Kafka
+	// Close closes the connection to Kafka
 	Close()
 }
 
-// Sarama implementation of KafkaClient
+// SaramaKafkaClient is the Sarama implementation of KafkaClient
 type SaramaKafkaClient struct {
 	Consumer  sarama.Consumer
 	Producer  sarama.AsyncProducer
@@ -38,7 +38,7 @@ type SaramaKafkaClient struct {
 	Logger    Logger
 }
 
-// Registers a Kafka Processor
+// RegisterProcessor registers a Kafka Processor
 func (kc *SaramaKafkaClient) RegisterProcessor(kp KafkaProcessor) {
 	if kc.Logger != nil {
 		kc.Logger.Debug("Registering Kafka processor...")
@@ -46,7 +46,7 @@ func (kc *SaramaKafkaClient) RegisterProcessor(kp KafkaProcessor) {
 	kc.processor = kp
 }
 
-// Processes source messages into published sink messages
+// Process processes source messages into published sink messages
 func (kc SaramaKafkaClient) Process() error {
 	if kc.processor != nil {
 		if kc.Logger != nil {
@@ -59,6 +59,7 @@ func (kc SaramaKafkaClient) Process() error {
 	return errors.New("Processor was nil")
 }
 
+// processMessages processes the messages and is designed to be run asynchronously
 func processMessages(inMessages <-chan *sarama.ConsumerMessage, producer sarama.AsyncProducer, sinkTopic string, processor KafkaProcessor) {
 	inMessage := <-inMessages
 	inMessageValue := inMessage.Value
@@ -83,7 +84,7 @@ func processMessages(inMessages <-chan *sarama.ConsumerMessage, producer sarama.
 	}
 }
 
-// SaramaKafkaClient's implementation of KafkaClient's Close function
+// Close is the SaramaKafkaClient's implementation of KafkaClient's Close function
 func (kc SaramaKafkaClient) Close() {
 	logger := NewLogger()
 	logger.Trace("Closing Sarama Kafka Client...")
@@ -95,6 +96,7 @@ func (kc SaramaKafkaClient) Close() {
 	}
 }
 
+// NewSaramaKafkaClient creates a new SaramaKafkaClient
 func NewSaramaKafkaClient(appConfig AppConfig) *SaramaKafkaClient {
 	return &SaramaKafkaClient{
 		Consumer: newSaramaKafkaConsumer(appConfig.GetBrokerList()),
@@ -103,7 +105,7 @@ func NewSaramaKafkaClient(appConfig AppConfig) *SaramaKafkaClient {
 	}
 }
 
-// Construct a new Kafka Consumer listening to the supplied brokers
+// newSaramaKafkaConsumer construct a new Kafka Consumer listening to the supplied brokers
 func newSaramaKafkaConsumer(kafkaBrokers []string) sarama.Consumer {
 	consumer, err := sarama.NewConsumer(kafkaBrokers, nil)
 	if err != nil {
@@ -113,10 +115,11 @@ func newSaramaKafkaConsumer(kafkaBrokers []string) sarama.Consumer {
 	return consumer
 }
 
-func (skc SaramaKafkaClient) createConsumerMessageChannel(consumer sarama.Consumer, sourceTopic string) <-chan *sarama.ConsumerMessage {
+// createConsumerMessageChannel creates a Sarama Consumer message channel
+func (kc SaramaKafkaClient) createConsumerMessageChannel(consumer sarama.Consumer, sourceTopic string) <-chan *sarama.ConsumerMessage {
 	logger := NewLogger()
 	logger.Debug(fmt.Sprintf("Finding partitions for source topic '%s'...", sourceTopic))
-	partitionList := skc.getConsumerPartitions(consumer, sourceTopic)
+	partitionList := kc.getConsumerPartitions(consumer, sourceTopic)
 	logger.Trace(fmt.Sprintf("Found %d partitions!", len(partitionList)))
 
 	// Channel to publish messages to
@@ -128,13 +131,14 @@ func (skc SaramaKafkaClient) createConsumerMessageChannel(consumer sarama.Consum
 		if err != nil {
 			panic(err)
 		}
-		go skc.consumeMessage(pc, messageChan)
+		go kc.consumeMessage(pc, messageChan)
 	}
 
 	return messageChan
 }
 
-func (skc SaramaKafkaClient) getConsumerPartitions(consumer sarama.Consumer, sourceTopic string) []int32 {
+// getConsumerPartitions gets the Sarama Consumer partitions
+func (kc SaramaKafkaClient) getConsumerPartitions(consumer sarama.Consumer, sourceTopic string) []int32 {
 	logger := NewLogger()
 	logger.Trace(fmt.Sprintf("Getting consumer partitions for topic '%s'", sourceTopic))
 	partitionList, err := consumer.Partitions(sourceTopic) // get all partitions
@@ -144,7 +148,8 @@ func (skc SaramaKafkaClient) getConsumerPartitions(consumer sarama.Consumer, sou
 	return partitionList
 }
 
-func (skc SaramaKafkaClient) consumeMessage(pc sarama.PartitionConsumer, messages chan<- *sarama.ConsumerMessage) {
+// consumeMessage consumes the messages from the ConsumerMessage channel
+func (kc SaramaKafkaClient) consumeMessage(pc sarama.PartitionConsumer, messages chan<- *sarama.ConsumerMessage) {
 	logger := NewLogger()
 	for message := range pc.Messages() {
 		if message != nil {
@@ -154,7 +159,7 @@ func (skc SaramaKafkaClient) consumeMessage(pc sarama.PartitionConsumer, message
 	}
 }
 
-// Construct a new Kafka Producer
+// newKafkaProducer construct a new Kafka Producer
 func newKafkaProducer(brokers []string) sarama.AsyncProducer {
 	producerConfig := sarama.NewConfig()
 	producerConfig.Producer.RequiredAcks = sarama.WaitForLocal       // Only wait for the leader to ack

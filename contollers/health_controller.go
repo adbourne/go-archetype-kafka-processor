@@ -6,14 +6,14 @@ import (
 )
 
 const (
-	StatusOk = "ok"
+	// statusOk is the ok status message
+	statusOk = "ok"
 )
 
-// GET /health
-// Health check endpoint, returns a 200 success when the service is up
+// HealthEndpoint returns a 200 success when the service is up
 func HealthEndpoint(w http.ResponseWriter, r *http.Request) {
 	appHealth := AppHealth{
-		Status: StatusOk,
+		Status: statusOk,
 	}
 
 	response, err := json.Marshal(appHealth)
@@ -25,6 +25,7 @@ func HealthEndpoint(w http.ResponseWriter, r *http.Request) {
 	w.Write(response)
 }
 
+// AppHealth is the data struct to be returned from the HealthEndpoint
 type AppHealth struct {
 	Status string `json:"status"`
 }

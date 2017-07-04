@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-// Abstraction for logging
+// Logger is an abstraction for logging
 // We can use this interface throughout the application and swap out the underlying logging
 // libraries at will
 type Logger interface {
@@ -20,40 +20,47 @@ type Logger interface {
 	Trace(msg string)
 }
 
-// Create a new Logger
+// NewLogger creates a new Logger
 // TODO: How to make this present everywhere, but separate from the AppContext? Perhaps this is good enough
 func NewLogger() Logger {
 	return &SystemOutLogger{}
 }
 
-// Logs everything to system out
+// SystemOutLogger logs everything to system out
 type SystemOutLogger struct {
 }
 
-func (_ *SystemOutLogger) Error(msg string) {
+// Error is an ERROR level log message
+func (l *SystemOutLogger) Error(msg string) {
 	logLine("ERROR", msg)
 }
 
-func (_ *SystemOutLogger) Warn(msg string) {
+// Warn is an WARN level log message
+func (l *SystemOutLogger) Warn(msg string) {
 	logLine("WARN", msg)
 }
 
-func (_ *SystemOutLogger) Info(msg string) {
+// Info is an INFO level log message
+func (l *SystemOutLogger) Info(msg string) {
 	logLine("INFO", msg)
 }
 
-func (_ *SystemOutLogger) Debug(msg string) {
+// Debug is an DEBUG level log message
+func (l *SystemOutLogger) Debug(msg string) {
 	logLine("DEBUG", msg)
 }
 
-func (_ *SystemOutLogger) Trace(msg string) {
+// Trace is an TRACE level log message
+func (l *SystemOutLogger) Trace(msg string) {
 	logLine("TRACE", msg)
 }
 
+// logLine logs a line in a standard format using the provided level and message
 func logLine(level string, msg string) {
 	log.Printf("%s %s: %s", getTime(), level, msg)
 }
 
+// getTime gets the time in RFC3339 format
 func getTime() string {
 	return time.Now().Format(time.RFC3339)
 }
