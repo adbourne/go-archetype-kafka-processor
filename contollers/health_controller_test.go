@@ -1,9 +1,9 @@
 package controllers
 
 import (
-	"testing"
 	"io/ioutil"
 	"net/http/httptest"
+	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -19,4 +19,3 @@ func TestHealthEndpointReturnsCorrectJson(t *testing.T) {
 	assert.Equal(t, "{\"status\":\"ok\"}", string(body))
 	assert.Equal(t, "application/json; charset=utf-8", resp.Header.Get("Content-Type"))
 }
-

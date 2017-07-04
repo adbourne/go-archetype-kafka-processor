@@ -7,17 +7,17 @@ import (
 // The application context
 type AppContext struct {
 	// The application config
-	AppConfig           AppConfig
+	AppConfig AppConfig
 
 	// The random number service
 	RandomNumberService services.RandomNumberService
 
 	// The Kafka client
-	KafkaClient         KafkaClient
+	KafkaClient KafkaClient
 
 	// The Kafka Processor
-	KafkaProcessor      KafkaProcessor
+	KafkaProcessor KafkaProcessor
 
 	// The HTTP server
-	HttpServer          HttpServer
+	HttpServer HttpServer
 }

@@ -1,8 +1,8 @@
 package config
 
 import (
-	"os"
 	"log"
+	"os"
 	"strconv"
 	"strings"
 )
@@ -24,33 +24,32 @@ const (
 	EnvVarSinkTopic = "REST_ARCHETYPE_SINK_TOPIC"
 )
 
-
 // The application configuration
 type AppConfig struct {
 	// The port to run the rest server on
-	Port        int
+	Port int
 
 	// The seed to use when generating randomness
-	RandomSeed  int64
+	RandomSeed int64
 
 	// The comma delimited list of kafka brokers
-	Brokers     string
+	Brokers string
 
 	// The name of the Kafka source topic
 	SourceTopic string
 
 	// The name of the Kafka sink topic
-	SinkTopic   string
+	SinkTopic string
 }
 
 // Constructs a new AppConfig
 func NewAppConfig() AppConfig {
 	return AppConfig{
-		Port: loadEnvVarAsInt(EnvVarPort, 8080),
-		RandomSeed: int64(loadEnvVarAsInt(EnvVarRandomSeed, 1)),
-		Brokers: loadEnvVarAsString(EnvVarKafkaBrokers, "localhost:9092"),
+		Port:        loadEnvVarAsInt(EnvVarPort, 8080),
+		RandomSeed:  int64(loadEnvVarAsInt(EnvVarRandomSeed, 1)),
+		Brokers:     loadEnvVarAsString(EnvVarKafkaBrokers, "localhost:9092"),
 		SourceTopic: loadEnvVarAsString(EnvVarSourceTopic, "source-topic"),
-		SinkTopic: loadEnvVarAsString(EnvVarSinkTopic, "sink-topic"),
+		SinkTopic:   loadEnvVarAsString(EnvVarSinkTopic, "sink-topic"),
 	}
 }
 

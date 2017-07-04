@@ -1,13 +1,13 @@
 package config
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
-	"time"
-	"log"
-	"encoding/json"
 	"github.com/Shopify/sarama"
 	"github.com/adbourne/go-archetype-rest/messages"
+	"log"
+	"time"
 )
 
 // A KafkaProcessor turns a Source Message into a Sink Message
@@ -40,7 +40,7 @@ type SaramaKafkaClient struct {
 
 // Registers a Kafka Processor
 func (kc *SaramaKafkaClient) RegisterProcessor(kp KafkaProcessor) {
-	if (kc.Logger != nil) {
+	if kc.Logger != nil {
 		kc.Logger.Debug("Registering Kafka processor...")
 	}
 	kc.processor = kp
@@ -49,7 +49,7 @@ func (kc *SaramaKafkaClient) RegisterProcessor(kp KafkaProcessor) {
 // Processes source messages into published sink messages
 func (kc SaramaKafkaClient) Process() error {
 	if kc.processor != nil {
-		if (kc.Logger != nil) {
+		if kc.Logger != nil {
 			kc.Logger.Debug("Starting to process messages...")
 		}
 		messagesInChan := kc.createConsumerMessageChannel(kc.Consumer, kc.AppConfig.SourceTopic)
@@ -72,7 +72,7 @@ func processMessages(inMessages <-chan *sarama.ConsumerMessage, producer sarama.
 	} else {
 		logger := NewLogger()
 		sinkMessage := processor.Process(*srcMsg)
-		encodedMsg,_ := sinkMessage.Encode()
+		encodedMsg, _ := sinkMessage.Encode()
 		logger.Debug(fmt.Sprintf("Sending sink message '%s'", encodedMsg))
 
 		producer.Input() <- &sarama.ProducerMessage{
@@ -87,11 +87,11 @@ func processMessages(inMessages <-chan *sarama.ConsumerMessage, producer sarama.
 func (kc SaramaKafkaClient) Close() {
 	logger := NewLogger()
 	logger.Trace("Closing Sarama Kafka Client...")
-	if (kc.Consumer.Close() != nil) {
-		logger.Warn("Unable to close Sarama consumer");
+	if kc.Consumer.Close() != nil {
+		logger.Warn("Unable to close Sarama consumer")
 	}
-	if (kc.Producer.Close() != nil) {
-		logger.Warn("Unable to close Sarama producer");
+	if kc.Producer.Close() != nil {
+		logger.Warn("Unable to close Sarama producer")
 	}
 }
 
@@ -99,10 +99,9 @@ func NewSaramaKafkaClient(appConfig AppConfig) *SaramaKafkaClient {
 	return &SaramaKafkaClient{
 		Consumer: newSaramaKafkaConsumer(appConfig.GetBrokerList()),
 		Producer: newKafkaProducer(appConfig.GetBrokerList()),
-		Logger: NewLogger(),
+		Logger:   NewLogger(),
 	}
 }
-
 
 // Construct a new Kafka Consumer listening to the supplied brokers
 func newSaramaKafkaConsumer(kafkaBrokers []string) sarama.Consumer {
@@ -114,7 +113,7 @@ func newSaramaKafkaConsumer(kafkaBrokers []string) sarama.Consumer {
 	return consumer
 }
 
-func (skc SaramaKafkaClient)createConsumerMessageChannel(consumer sarama.Consumer, sourceTopic string) <-chan *sarama.ConsumerMessage {
+func (skc SaramaKafkaClient) createConsumerMessageChannel(consumer sarama.Consumer, sourceTopic string) <-chan *sarama.ConsumerMessage {
 	logger := NewLogger()
 	logger.Debug(fmt.Sprintf("Finding partitions for source topic '%s'...", sourceTopic))
 	partitionList := skc.getConsumerPartitions(consumer, sourceTopic)
@@ -126,7 +125,7 @@ func (skc SaramaKafkaClient)createConsumerMessageChannel(consumer sarama.Consume
 	for index, partition := range partitionList {
 		logger.Trace(fmt.Sprintf("Consuming from partition %d [%d] from source topic '%s'...", index, partition, sourceTopic))
 		pc, err := consumer.ConsumePartition(sourceTopic, partition, sarama.OffsetOldest)
-		if (err != nil) {
+		if err != nil {
 			panic(err)
 		}
 		go skc.consumeMessage(pc, messageChan)
@@ -145,16 +144,15 @@ func (skc SaramaKafkaClient) getConsumerPartitions(consumer sarama.Consumer, sou
 	return partitionList
 }
 
-func (skc SaramaKafkaClient) consumeMessage(pc sarama.PartitionConsumer, messages chan <- *sarama.ConsumerMessage) {
+func (skc SaramaKafkaClient) consumeMessage(pc sarama.PartitionConsumer, messages chan<- *sarama.ConsumerMessage) {
 	logger := NewLogger()
 	for message := range pc.Messages() {
-		if (message != nil) {
-			logger.Debug(fmt.Sprintf("Recieved message %s:" + string(message.Value), message))
+		if message != nil {
+			logger.Debug(fmt.Sprintf("Recieved message %s:"+string(message.Value), message))
 			messages <- message
 		}
 	}
 }
-
 
 // Construct a new Kafka Producer
 func newKafkaProducer(brokers []string) sarama.AsyncProducer {

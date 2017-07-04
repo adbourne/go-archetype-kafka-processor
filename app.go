@@ -1,9 +1,9 @@
 package main
 
 import (
-	"log"
 	"github.com/adbourne/go-archetype-rest/config"
 	"github.com/adbourne/go-archetype-rest/contollers"
+	"log"
 )
 
 func main() {

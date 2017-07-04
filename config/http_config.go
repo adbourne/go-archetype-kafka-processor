@@ -38,6 +38,6 @@ func (dhs DefaultHttpServer) Run() {
 func NewDefaultHttpServer(port int) *DefaultHttpServer {
 	return &DefaultHttpServer{
 		logger: NewLogger(),
-		Port: port,
+		Port:   port,
 	}
 }

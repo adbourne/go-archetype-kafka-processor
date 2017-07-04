@@ -2,9 +2,9 @@ package processors
 
 import (
 	"fmt"
-	"testing"
-	"github.com/stretchr/testify/assert"
 	"github.com/adbourne/go-archetype-rest/messages"
+	"github.com/stretchr/testify/assert"
+	"testing"
 )
 
 func TestProcessWithSeedGeneratesARandomNumber(t *testing.T) {
@@ -53,4 +53,3 @@ func (rns *MockRandomNumberService) GenerateRandomNumber(seed int) int {
 	}
 	panic(fmt.Sprintf("Provided seed '%d' did not match expected seed '%d'", seed, rns.expectedSeed))
 }
-

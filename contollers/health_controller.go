@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"net/http"
 	"encoding/json"
+	"net/http"
 )
 
 const (
@@ -17,7 +17,7 @@ func HealthEndpoint(w http.ResponseWriter, r *http.Request) {
 	}
 
 	response, err := json.Marshal(appHealth)
-	if(err != nil){
+	if err != nil {
 		w.Write([]byte("Oh No!")) // FIXME
 	}
 
@@ -28,4 +28,3 @@ func HealthEndpoint(w http.ResponseWriter, r *http.Request) {
 type AppHealth struct {
 	Status string `json:"status"`
 }
-

@@ -1,15 +1,15 @@
 package main
 
 import (
-	"testing"
 	"github.com/adbourne/go-archetype-rest/config"
 	"github.com/stretchr/testify/mock"
+	"testing"
 )
 
 const (
-	Broker = "localhost"
+	Broker      = "localhost"
 	SourceTopic = "source-topic"
-	SinkTopic = "sink-topic"
+	SinkTopic   = "sink-topic"
 )
 
 func TestApplicationIsStartedCorrectly(t *testing.T) {
@@ -24,7 +24,7 @@ func TestApplicationIsStartedCorrectly(t *testing.T) {
 	mockAppContext := newTestAppContext(t, mockKafkaClient, MockHttpServer)
 	RunApp(mockAppContext)
 
-	mockKafkaClient.AssertExpectations(t);
+	mockKafkaClient.AssertExpectations(t)
 	MockHttpServer.AssertExpectations(t)
 }
 
@@ -32,11 +32,11 @@ func newTestAppContext(t *testing.T, mkc *MockKafkaClient, mhs *MockHttpServer) 
 	appConfig := newTestAppConfig()
 	randomNumberService := newRandomNumberService()
 	return &config.AppContext{
-		AppConfig: appConfig,
+		AppConfig:           appConfig,
 		RandomNumberService: randomNumberService,
-		KafkaClient: mkc,
-		KafkaProcessor: newKafkaProcessor(randomNumberService),
-		HttpServer: mhs,
+		KafkaClient:         mkc,
+		KafkaProcessor:      newKafkaProcessor(randomNumberService),
+		HttpServer:          mhs,
 	}
 }
 
