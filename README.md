@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/adbourne/go-archetype-kafka-processor.svg?branch=master)](https://travis-ci.org/adbourne/go-archetype-rest)
+[![Build Status](https://travis-ci.org/adbourne/go-archetype-kafka-processor.svg?branch=master)](https://travis-ci.org/adbourne/go-archetype-kafka-processor)
 [![Go Report Card](https://goreportcard.com/badge/github.com/adbourne/go-archetype-kafka-processor)](https://goreportcard.com/report/github.com/adbourne/go-archetype-kafka-processor)
 
 # go-archetype-kafka-processor

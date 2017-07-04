@@ -1,9 +1,9 @@
 package processors
 
 import (
-	"github.com/adbourne/go-archetype-rest/config"
-	"github.com/adbourne/go-archetype-rest/messages"
-	"github.com/adbourne/go-archetype-rest/services"
+	"github.com/adbourne/go-archetype-kafka-processor/config"
+	"github.com/adbourne/go-archetype-kafka-processor/messages"
+	"github.com/adbourne/go-archetype-kafka-processor/services"
 )
 
 // RandomNumberProcessor is a kafka processor that generates a random number

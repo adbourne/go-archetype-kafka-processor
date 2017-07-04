@@ -1,9 +1,9 @@
 package main
 
 import (
-	"github.com/adbourne/go-archetype-rest/config"
-	"github.com/adbourne/go-archetype-rest/contollers"
 	"log"
+	"github.com/adbourne/go-archetype-kafka-processor/config"
+	"github.com/adbourne/go-archetype-kafka-processor/contollers"
 )
 
 func main() {
@@ -36,7 +36,7 @@ func RunApp(appContext *config.AppContext) {
 
 	// Start the HTTP service
 	logger.Debug("Starting HTTP server...")
-	httpServer := appContext.HttpServer
+	httpServer := appContext.HTTPServer
 	httpServer.RegisterEndpoint("/health", controllers.HealthEndpoint)
 	httpServer.Run()
 }

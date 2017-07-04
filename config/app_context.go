@@ -1,7 +1,7 @@
 package config
 
 import (
-	"github.com/adbourne/go-archetype-rest/services"
+	"github.com/adbourne/go-archetype-kafka-processor/services"
 )
 
 // AppContext is the application context

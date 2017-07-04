@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/adbourne/go-archetype-rest/config"
+	"github.com/adbourne/go-archetype-kafka-processor/config"
 	"github.com/stretchr/testify/mock"
 	"testing"
 )

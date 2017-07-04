@@ -2,7 +2,7 @@ package processors
 
 import (
 	"fmt"
-	"github.com/adbourne/go-archetype-rest/messages"
+	"github.com/adbourne/go-archetype-kafka-processor/messages"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )

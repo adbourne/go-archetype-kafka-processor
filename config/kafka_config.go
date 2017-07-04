@@ -5,7 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/Shopify/sarama"
-	"github.com/adbourne/go-archetype-rest/messages"
+	"github.com/adbourne/go-archetype-kafka-processor/messages"
 	"log"
 	"time"
 )

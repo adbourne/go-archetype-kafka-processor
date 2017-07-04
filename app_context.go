@@ -1,9 +1,9 @@
 package main
 
 import (
-	"github.com/adbourne/go-archetype-rest/config"
-	"github.com/adbourne/go-archetype-rest/processors"
-	"github.com/adbourne/go-archetype-rest/services"
+	"github.com/adbourne/go-archetype-kafka-processor/config"
+	"github.com/adbourne/go-archetype-kafka-processor/processors"
+	"github.com/adbourne/go-archetype-kafka-processor/services"
 )
 
 // NewAppContext creates the application context
