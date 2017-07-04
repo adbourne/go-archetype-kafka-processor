@@ -21,7 +21,7 @@ type Logger interface {
 }
 
 // Create a new Logger
-// TODO: How to make this present everywhere, but seperate from the AppContext? Perhaps this is good enough
+// TODO: How to make this present everywhere, but separate from the AppContext? Perhaps this is good enough
 func NewLogger() Logger {
 	return &SystemOutLogger{}
 }

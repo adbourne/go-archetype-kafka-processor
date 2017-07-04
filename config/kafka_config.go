@@ -67,7 +67,7 @@ func processMessages(inMessages <-chan *sarama.ConsumerMessage, producer sarama.
 
 	err := json.Unmarshal(inMessageValue, &srcMsg)
 	if err != nil {
-		log.Printf("Recieved invalid message '%s'", inMessageValue)
+		log.Printf("Received invalid message '%s'", inMessageValue)
 
 	} else {
 		logger := NewLogger()
@@ -148,7 +148,7 @@ func (skc SaramaKafkaClient) consumeMessage(pc sarama.PartitionConsumer, message
 	logger := NewLogger()
 	for message := range pc.Messages() {
 		if message != nil {
-			logger.Debug(fmt.Sprintf("Recieved message %s:"+string(message.Value), message))
+			logger.Debug(fmt.Sprintf("Received message %s:"+string(message.Value), message))
 			messages <- message
 		}
 	}
