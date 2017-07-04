@@ -17,7 +17,7 @@ func main() {
 	RunApp(appContext)
 }
 
-// Runs the application
+// RunApp runs the application
 func RunApp(appContext *config.AppContext) {
 	logger := config.NewLogger()
 

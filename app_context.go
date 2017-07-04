@@ -6,7 +6,7 @@ import (
 	"github.com/adbourne/go-archetype-rest/services"
 )
 
-// Creates the application context
+// NewAppContext creates the application context
 func NewAppContext(appConfig config.AppConfig) *config.AppContext {
 	randomNumberService := newRandomNumberService()
 	return &config.AppContext{
@@ -14,7 +14,7 @@ func NewAppContext(appConfig config.AppConfig) *config.AppContext {
 		RandomNumberService: randomNumberService,
 		KafkaClient:         newKafkaClient(appConfig),
 		KafkaProcessor:      newKafkaProcessor(randomNumberService),
-		HttpServer:          newHttpServer(appConfig),
+		HttpServer:          newHTTPServer(appConfig),
 	}
 }
 
@@ -36,6 +36,6 @@ func newKafkaProcessor(randomNumberService services.RandomNumberService) config.
 }
 
 // Creates the HTTP server
-func newHttpServer(appConfig config.AppConfig) config.HttpServer {
+func newHTTPServer(appConfig config.AppConfig) config.HttpServer {
 	return config.NewDefaultHttpServer(appConfig.Port)
 }

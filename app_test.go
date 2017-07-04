@@ -17,18 +17,18 @@ func TestApplicationIsStartedCorrectly(t *testing.T) {
 	mockKafkaClient.On("RegisterProcessor", mock.Anything).Return()
 	mockKafkaClient.On("Process").Return(nil)
 
-	MockHttpServer := new(MockHttpServer)
-	MockHttpServer.On("RegisterEndpoint", "/health", mock.Anything).Return()
-	MockHttpServer.On("Run").Return()
+	MockHTTPServer := new(MockHTTPServer)
+	MockHTTPServer.On("RegisterEndpoint", "/health", mock.Anything).Return()
+	MockHTTPServer.On("Run").Return()
 
-	mockAppContext := newTestAppContext(t, mockKafkaClient, MockHttpServer)
+	mockAppContext := newTestAppContext(t, mockKafkaClient, MockHTTPServer)
 	RunApp(mockAppContext)
 
 	mockKafkaClient.AssertExpectations(t)
-	MockHttpServer.AssertExpectations(t)
+	MockHTTPServer.AssertExpectations(t)
 }
 
-func newTestAppContext(t *testing.T, mkc *MockKafkaClient, mhs *MockHttpServer) *config.AppContext {
+func newTestAppContext(t *testing.T, mkc *MockKafkaClient, mhs *MockHTTPServer) *config.AppContext {
 	appConfig := newTestAppConfig()
 	randomNumberService := newRandomNumberService()
 	return &config.AppContext{
@@ -57,16 +57,16 @@ func (mkc *MockKafkaClient) Close() {
 	mkc.Called()
 }
 
-type MockHttpServer struct {
+type MockHTTPServer struct {
 	mock.Mock
 }
 
-func (mhs *MockHttpServer) RegisterEndpoint(endpoint string, handler config.Handler) {
+func (mhs *MockHTTPServer) RegisterEndpoint(endpoint string, handler config.Handler) {
 	mhs.Called(endpoint, handler)
 }
 
 // Runs the HTTP server
-func (mhs *MockHttpServer) Run() {
+func (mhs *MockHTTPServer) Run() {
 	mhs.Called()
 }
 
