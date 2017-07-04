@@ -14,7 +14,7 @@ func NewAppContext(appConfig config.AppConfig) *config.AppContext {
 		RandomNumberService: randomNumberService,
 		KafkaClient:         newKafkaClient(appConfig),
 		KafkaProcessor:      newKafkaProcessor(randomNumberService),
-		HttpServer:          newHTTPServer(appConfig),
+		HTTPServer:          newHTTPServer(appConfig),
 	}
 }
 
@@ -36,6 +36,6 @@ func newKafkaProcessor(randomNumberService services.RandomNumberService) config.
 }
 
 // Creates the HTTP server
-func newHTTPServer(appConfig config.AppConfig) config.HttpServer {
-	return config.NewDefaultHttpServer(appConfig.Port)
+func newHTTPServer(appConfig config.AppConfig) config.HTTPServer {
+	return config.NewDefaultHTTPServer(appConfig.Port)
 }

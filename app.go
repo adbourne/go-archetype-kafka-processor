@@ -1,9 +1,9 @@
 package main
 
 import (
-	"log"
 	"github.com/adbourne/go-archetype-kafka-processor/config"
 	"github.com/adbourne/go-archetype-kafka-processor/contollers"
+	"log"
 )
 
 func main() {

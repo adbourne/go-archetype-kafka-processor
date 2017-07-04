@@ -36,7 +36,7 @@ func newTestAppContext(t *testing.T, mkc *MockKafkaClient, mhs *MockHTTPServer) 
 		RandomNumberService: randomNumberService,
 		KafkaClient:         mkc,
 		KafkaProcessor:      newKafkaProcessor(randomNumberService),
-		HttpServer:          mhs,
+		HTTPServer:          mhs,
 	}
 }
 
