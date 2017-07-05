@@ -8,7 +8,7 @@ build:
 	go install
 
 test:
-	./hack/test-recursively.sh
+	./scripts/test-recursively.sh
 
 package:
 	CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o bin/app && docker build . -t adbourne/go-archetype-kafka-processor:latest
