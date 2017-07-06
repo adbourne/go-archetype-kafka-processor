@@ -9,19 +9,19 @@ import (
 
 const (
 	// EnvVarPort is the environment variable of the HTTP port to use
-	EnvVarPort = "REST_ARCHETYPE_PORT"
+	EnvVarPort = "KAFKA_PROCESSOR_ARCHETYPE_PORT"
 
 	// EnvVarRandomSeed is the environment variable for the random seed to use
-	EnvVarRandomSeed = "REST_ARCHETYPE_RANDOM_SEED"
+	EnvVarRandomSeed = "KAFKA_PROCESSOR_ARCHETYPE_RANDOM_SEED"
 
 	// EnvVarKafkaBrokers is the environment variable for the comma delimited list of kafka brokers
-	EnvVarKafkaBrokers = "REST_ARCHETYPE_KAFKA_BROKERS"
+	EnvVarKafkaBrokers = "KAFKA_PROCESSOR_ARCHETYPE_KAFKA_BROKERS"
 
 	// EnvVarSourceTopic is the environment variable for the source Kafka topic
-	EnvVarSourceTopic = "REST_ARCHETYPE_SOURCE_TOPIC"
+	EnvVarSourceTopic = "KAFKA_PROCESSOR_ARCHETYPE_SOURCE_TOPIC"
 
 	// EnvVarSinkTopic is the environment variable for the Kafka sink topic
-	EnvVarSinkTopic = "REST_ARCHETYPE_SINK_TOPIC"
+	EnvVarSinkTopic = "KAFKA_PROCESSOR_ARCHETYPE_SINK_TOPIC"
 )
 
 // AppConfig is the application configuration
