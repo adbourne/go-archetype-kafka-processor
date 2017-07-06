@@ -1,8 +1,9 @@
-package config
+package services
 
 import (
 	"fmt"
 	"net/http"
+	"github.com/adbourne/go-archetype-kafka-processor/config"
 )
 
 // Handler is a HTTP endpoint handler
@@ -20,7 +21,7 @@ type HTTPServer interface {
 // DefaultHTTPServer is the default implementation of HTTPServer
 type DefaultHTTPServer struct {
 	// The struct logger
-	logger Logger
+	logger config.Logger
 
 	// The port to run on
 	Port int
@@ -41,7 +42,7 @@ func (dhs DefaultHTTPServer) Run() {
 // NewDefaultHTTPServer creates a new DefaultHttpServer
 func NewDefaultHTTPServer(port int) *DefaultHTTPServer {
 	return &DefaultHTTPServer{
-		logger: NewLogger(),
+		logger: config.NewLogger(),
 		Port:   port,
 	}
 }

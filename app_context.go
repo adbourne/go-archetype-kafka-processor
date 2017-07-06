@@ -21,7 +21,7 @@ type AppContext struct {
 	KafkaProcessor config.KafkaProcessor
 
 	// HTTPServer is the HTTP server
-	HTTPServer config.HTTPServer
+	HTTPServer services.HTTPServer
 }
 
 // NewAppContext creates the application context
@@ -54,6 +54,6 @@ func newKafkaProcessor(randomNumberService services.RandomNumberService) config.
 }
 
 // Creates the HTTP server
-func newHTTPServer(appConfig config.AppConfig) config.HTTPServer {
-	return config.NewDefaultHTTPServer(appConfig.Port)
+func newHTTPServer(appConfig config.AppConfig) services.HTTPServer {
+	return services.NewDefaultHTTPServer(appConfig.Port)
 }

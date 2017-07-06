@@ -4,6 +4,7 @@ import (
 	"github.com/adbourne/go-archetype-kafka-processor/config"
 	"github.com/stretchr/testify/mock"
 	"testing"
+	"github.com/adbourne/go-archetype-kafka-processor/services"
 )
 
 const (
@@ -61,7 +62,7 @@ type MockHTTPServer struct {
 	mock.Mock
 }
 
-func (mhs *MockHTTPServer) RegisterEndpoint(endpoint string, handler config.Handler) {
+func (mhs *MockHTTPServer) RegisterEndpoint(endpoint string, handler services.Handler) {
 	mhs.Called(endpoint, handler)
 }
 
