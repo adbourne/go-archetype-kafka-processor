@@ -28,10 +28,10 @@ func TestApplicationIsStartedCorrectly(t *testing.T) {
 	MockHTTPServer.AssertExpectations(t)
 }
 
-func newTestAppContext(t *testing.T, mkc *MockKafkaClient, mhs *MockHTTPServer) *config.AppContext {
+func newTestAppContext(t *testing.T, mkc *MockKafkaClient, mhs *MockHTTPServer) *AppContext {
 	appConfig := newTestAppConfig()
 	randomNumberService := newRandomNumberService()
-	return &config.AppContext{
+	return &AppContext{
 		AppConfig:           appConfig,
 		RandomNumberService: randomNumberService,
 		KafkaClient:         mkc,

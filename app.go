@@ -18,7 +18,7 @@ func main() {
 }
 
 // RunApp runs the application
-func RunApp(appContext *config.AppContext) {
+func RunApp(appContext *AppContext) {
 	logger := config.NewLogger()
 
 	printBanner()
