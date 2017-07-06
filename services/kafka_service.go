@@ -1,4 +1,4 @@
-package config
+package services
 
 import (
 	"encoding/json"
@@ -8,6 +8,7 @@ import (
 	"github.com/adbourne/go-archetype-kafka-processor/messages"
 	"log"
 	"time"
+	"github.com/adbourne/go-archetype-kafka-processor/config"
 )
 
 // KafkaProcessor turns a Source Message into a Sink Message
@@ -33,9 +34,9 @@ type KafkaClient interface {
 type SaramaKafkaClient struct {
 	Consumer  sarama.Consumer
 	Producer  sarama.AsyncProducer
-	AppConfig AppConfig
+	AppConfig config.AppConfig
 	processor KafkaProcessor
-	Logger    Logger
+	Logger    config.Logger
 }
 
 // RegisterProcessor registers a Kafka Processor
@@ -71,7 +72,7 @@ func processMessages(inMessages <-chan *sarama.ConsumerMessage, producer sarama.
 		log.Printf("Received invalid message '%s'", inMessageValue)
 
 	} else {
-		logger := NewLogger()
+		logger := config.NewLogger()
 		sinkMessage := processor.Process(*srcMsg)
 		encodedMsg, _ := sinkMessage.Encode()
 		logger.Debug(fmt.Sprintf("Sending sink message '%s'", encodedMsg))
@@ -86,7 +87,7 @@ func processMessages(inMessages <-chan *sarama.ConsumerMessage, producer sarama.
 
 // Close is the SaramaKafkaClient's implementation of KafkaClient's Close function
 func (kc SaramaKafkaClient) Close() {
-	logger := NewLogger()
+	logger := config.NewLogger()
 	logger.Trace("Closing Sarama Kafka Client...")
 	if kc.Consumer.Close() != nil {
 		logger.Warn("Unable to close Sarama consumer")
@@ -97,11 +98,11 @@ func (kc SaramaKafkaClient) Close() {
 }
 
 // NewSaramaKafkaClient creates a new SaramaKafkaClient
-func NewSaramaKafkaClient(appConfig AppConfig) *SaramaKafkaClient {
+func NewSaramaKafkaClient(appConfig config.AppConfig) *SaramaKafkaClient {
 	return &SaramaKafkaClient{
 		Consumer: newSaramaKafkaConsumer(appConfig.GetBrokerList()),
 		Producer: newKafkaProducer(appConfig.GetBrokerList()),
-		Logger:   NewLogger(),
+		Logger:   config.NewLogger(),
 	}
 }
 
@@ -117,7 +118,7 @@ func newSaramaKafkaConsumer(kafkaBrokers []string) sarama.Consumer {
 
 // createConsumerMessageChannel creates a Sarama Consumer message channel
 func (kc SaramaKafkaClient) createConsumerMessageChannel(consumer sarama.Consumer, sourceTopic string) <-chan *sarama.ConsumerMessage {
-	logger := NewLogger()
+	logger := config.NewLogger()
 	logger.Debug(fmt.Sprintf("Finding partitions for source topic '%s'...", sourceTopic))
 	partitionList := kc.getConsumerPartitions(consumer, sourceTopic)
 	logger.Trace(fmt.Sprintf("Found %d partitions!", len(partitionList)))
@@ -139,7 +140,7 @@ func (kc SaramaKafkaClient) createConsumerMessageChannel(consumer sarama.Consume
 
 // getConsumerPartitions gets the Sarama Consumer partitions
 func (kc SaramaKafkaClient) getConsumerPartitions(consumer sarama.Consumer, sourceTopic string) []int32 {
-	logger := NewLogger()
+	logger := config.NewLogger()
 	logger.Trace(fmt.Sprintf("Getting consumer partitions for topic '%s'", sourceTopic))
 	partitionList, err := consumer.Partitions(sourceTopic) // get all partitions
 	if err != nil {
@@ -150,7 +151,7 @@ func (kc SaramaKafkaClient) getConsumerPartitions(consumer sarama.Consumer, sour
 
 // consumeMessage consumes the messages from the ConsumerMessage channel
 func (kc SaramaKafkaClient) consumeMessage(pc sarama.PartitionConsumer, messages chan<- *sarama.ConsumerMessage) {
-	logger := NewLogger()
+	logger :=config. NewLogger()
 	for message := range pc.Messages() {
 		if message != nil {
 			logger.Debug(fmt.Sprintf("Received message %s:"+string(message.Value), message))

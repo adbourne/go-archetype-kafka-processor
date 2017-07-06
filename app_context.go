@@ -15,10 +15,10 @@ type AppContext struct {
 	RandomNumberService services.RandomNumberService
 
 	// KafkaClient is the Kafka client
-	KafkaClient config.KafkaClient
+	KafkaClient services.KafkaClient
 
 	// KafkaProcessor is the Kafka Processor
-	KafkaProcessor config.KafkaProcessor
+	KafkaProcessor services.KafkaProcessor
 
 	// HTTPServer is the HTTP server
 	HTTPServer services.HTTPServer
@@ -42,12 +42,12 @@ func newRandomNumberService() *services.DefaultRandomNumberService {
 }
 
 // Creates a KafkaClient
-func newKafkaClient(appConfig config.AppConfig) config.KafkaClient {
-	return config.NewSaramaKafkaClient(appConfig)
+func newKafkaClient(appConfig config.AppConfig) services.KafkaClient {
+	return services.NewSaramaKafkaClient(appConfig)
 }
 
 // Creates a new KafkaProcessor
-func newKafkaProcessor(randomNumberService services.RandomNumberService) config.KafkaProcessor {
+func newKafkaProcessor(randomNumberService services.RandomNumberService) services.KafkaProcessor {
 	return processors.RandomNumberProcessor{
 		RandomNumberService: randomNumberService,
 	}

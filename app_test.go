@@ -45,7 +45,7 @@ type MockKafkaClient struct {
 	mock.Mock
 }
 
-func (mkc *MockKafkaClient) RegisterProcessor(kp config.KafkaProcessor) {
+func (mkc *MockKafkaClient) RegisterProcessor(kp services.KafkaProcessor) {
 	mkc.Called(kp)
 }
 
