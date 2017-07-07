@@ -11,6 +11,9 @@ type AppContext struct {
 	// AppConfig is the application config
 	AppConfig config.AppConfig
 
+	// Logger is the logger
+	Logger services.Logger
+
 	// RandomNumberService is the random number service
 	RandomNumberService services.RandomNumberService
 
@@ -26,14 +29,20 @@ type AppContext struct {
 
 // NewAppContext creates the application context
 func NewAppContext(appConfig config.AppConfig) *AppContext {
+	logger := newLogger()
 	randomNumberService := newRandomNumberService()
 	return &AppContext{
 		AppConfig:           appConfig,
 		RandomNumberService: randomNumberService,
-		KafkaClient:         newKafkaClient(appConfig),
+		KafkaClient:         newKafkaClient(appConfig, logger),
 		KafkaProcessor:      newKafkaProcessor(randomNumberService),
-		HTTPServer:          newHTTPServer(appConfig),
+		HTTPServer:          newHTTPServer(appConfig, logger),
 	}
+}
+
+// Creates a new Logger
+func newLogger() services.Logger {
+	return &services.SystemOutLogger{}
 }
 
 // Creates a RandomNumberService
@@ -42,8 +51,8 @@ func newRandomNumberService() *services.DefaultRandomNumberService {
 }
 
 // Creates a KafkaClient
-func newKafkaClient(appConfig config.AppConfig) services.KafkaClient {
-	return services.NewSaramaKafkaClient(appConfig)
+func newKafkaClient(appConfig config.AppConfig, logger services.Logger) services.KafkaClient {
+	return services.NewSaramaKafkaClient(appConfig, logger)
 }
 
 // Creates a new KafkaProcessor
@@ -54,6 +63,6 @@ func newKafkaProcessor(randomNumberService services.RandomNumberService) service
 }
 
 // Creates the HTTP server
-func newHTTPServer(appConfig config.AppConfig) services.HTTPServer {
-	return services.NewDefaultHTTPServer(appConfig.Port)
+func newHTTPServer(appConfig config.AppConfig, logger services.Logger) services.HTTPServer {
+	return services.NewDefaultHTTPServer(appConfig.Port, logger)
 }

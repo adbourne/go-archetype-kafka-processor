@@ -2,9 +2,9 @@ package main
 
 import (
 	"github.com/adbourne/go-archetype-kafka-processor/config"
+	"github.com/adbourne/go-archetype-kafka-processor/services"
 	"github.com/stretchr/testify/mock"
 	"testing"
-	"github.com/adbourne/go-archetype-kafka-processor/services"
 )
 
 const (
@@ -34,6 +34,7 @@ func newTestAppContext(t *testing.T, mkc *MockKafkaClient, mhs *MockHTTPServer) 
 	randomNumberService := newRandomNumberService()
 	return &AppContext{
 		AppConfig:           appConfig,
+		Logger:              newLogger(),
 		RandomNumberService: randomNumberService,
 		KafkaClient:         mkc,
 		KafkaProcessor:      newKafkaProcessor(randomNumberService),

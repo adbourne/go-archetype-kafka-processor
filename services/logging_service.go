@@ -1,4 +1,4 @@
-package config
+package services
 
 import (
 	"log"
@@ -20,14 +20,13 @@ type Logger interface {
 	Trace(msg string)
 }
 
-// NewLogger creates a new Logger
-// TODO: How to make this present everywhere, but separate from the AppContext? Perhaps this is good enough
-func NewLogger() Logger {
-	return &SystemOutLogger{}
-}
-
 // SystemOutLogger logs everything to system out
 type SystemOutLogger struct {
+}
+
+// NewSystemOutLogger creates a new SystemOutLogger
+func NewSystemOutLogger() *SystemOutLogger {
+	return &SystemOutLogger{}
 }
 
 // Error is an ERROR level log message
