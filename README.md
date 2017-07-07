@@ -4,7 +4,7 @@
 [![GoDoc](https://godoc.org/github.com/adbourne/go-archetype-kafka-processor?status.svg)](https://godoc.org/github.com/adbourne/go-archetype-kafka-processor)
 
 # go-archetype-kafka-processor
-=========
+
 A Golang project archetype for a Kafka Processor.
 
 What's a Kafka Processor? It's a headless service that consumes messages from an [Apache Kafka](https://kafka.apache.org/)
