@@ -12,3 +12,8 @@ func TestRandomNumberServiceGenerateRandomNumberGeneratesARandomNumber(t *testin
 
 	assert.Equal(t, expected, randomNumberService.GenerateRandomNumber(seed))
 }
+
+func TestNewDefaultRandomNumberServiceCreatesNewDefaultRandomNumberService(t *testing.T) {
+	result := NewDefaultRandomNumberService()
+	assert.NotNil(t, result)
+}
