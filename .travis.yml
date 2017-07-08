@@ -13,6 +13,7 @@ services:
 
 before_install:
  - go get github.com/fsouza/go-dockerclient
+ - go get github.com/stretchr/objx
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
