@@ -11,5 +11,11 @@ go:
 services:
   - docker
 
+before_install:
+ - go get github.com/tools/godep
+
+install:
+ - godep restore
+
 after_success:
   - bash <(curl -s https://codecov.io/bash)
