@@ -31,13 +31,14 @@ func TestApplicationIsStartedCorrectly(t *testing.T) {
 
 func newTestAppContext(t *testing.T, mkc *MockKafkaClient, mhs *MockHTTPServer) *AppContext {
 	appConfig := newTestAppConfig()
+	logger := newLogger()
 	randomNumberService := newRandomNumberService()
 	return &AppContext{
 		AppConfig:           appConfig,
-		Logger:              newLogger(),
+		Logger:              logger,
 		RandomNumberService: randomNumberService,
 		KafkaClient:         mkc,
-		KafkaProcessor:      newKafkaProcessor(randomNumberService),
+		KafkaProcessor:      newKafkaProcessor(randomNumberService, logger),
 		HTTPServer:          mhs,
 	}
 }

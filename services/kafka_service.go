@@ -32,9 +32,9 @@ type KafkaClient interface {
 
 // SaramaKafkaClient is the Sarama implementation of KafkaClient
 type SaramaKafkaClient struct {
+	AppConfig config.AppConfig
 	Consumer  sarama.Consumer
 	Producer  sarama.AsyncProducer
-	AppConfig config.AppConfig
 	processor KafkaProcessor
 	Logger    Logger
 }
@@ -48,12 +48,12 @@ func (kc *SaramaKafkaClient) RegisterProcessor(kp KafkaProcessor) {
 }
 
 // Process processes source messages into published sink messages
-func (kc SaramaKafkaClient) Process() error {
+func (kc *SaramaKafkaClient) Process() error {
 	if kc.processor != nil {
-		if kc.Logger != nil {
-			kc.Logger.Debug("Starting to process messages...")
-		}
-		messagesInChan := kc.createConsumerMessageChannel(kc.Consumer, kc.AppConfig.SourceTopic)
+		kc.Logger.Debug(fmt.Sprintf("%+v\n", kc.AppConfig))
+		sourceTopic := kc.AppConfig.SourceTopic
+		kc.Logger.Debug(fmt.Sprintf("Starting to process messages from source topic '%s'...", sourceTopic))
+		messagesInChan := kc.createConsumerMessageChannel(kc.Consumer, sourceTopic)
 		go kc.processMessages(messagesInChan, kc.Producer, kc.AppConfig.SinkTopic, kc.processor)
 		return nil
 	}
@@ -61,7 +61,7 @@ func (kc SaramaKafkaClient) Process() error {
 }
 
 // processMessages processes the messages and is designed to be run asynchronously
-func (kc SaramaKafkaClient) processMessages(inMessages <-chan *sarama.ConsumerMessage, producer sarama.AsyncProducer, sinkTopic string, processor KafkaProcessor) {
+func (kc *SaramaKafkaClient) processMessages(inMessages <-chan *sarama.ConsumerMessage, producer sarama.AsyncProducer, sinkTopic string, processor KafkaProcessor) {
 	inMessage := <-inMessages
 	inMessageValue := inMessage.Value
 
@@ -85,7 +85,7 @@ func (kc SaramaKafkaClient) processMessages(inMessages <-chan *sarama.ConsumerMe
 }
 
 // Close is the SaramaKafkaClient's implementation of KafkaClient's Close function
-func (kc SaramaKafkaClient) Close() {
+func (kc *SaramaKafkaClient) Close() {
 	kc.Logger.Trace("Closing Sarama Kafka Client...")
 	if kc.Consumer.Close() != nil {
 		kc.Logger.Warn("Unable to close Sarama consumer")
@@ -98,6 +98,7 @@ func (kc SaramaKafkaClient) Close() {
 // NewSaramaKafkaClient creates a new SaramaKafkaClient
 func NewSaramaKafkaClient(appConfig config.AppConfig, logger Logger) *SaramaKafkaClient {
 	return &SaramaKafkaClient{
+		AppConfig: appConfig,
 		Consumer: newSaramaKafkaConsumer(appConfig.GetBrokerList()),
 		Producer: newKafkaProducer(appConfig.GetBrokerList()),
 		Logger:   logger,

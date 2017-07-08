@@ -1,8 +1,8 @@
 package services
 
 import (
-	"testing"
 	"github.com/stretchr/testify/assert"
+	"testing"
 )
 
 func TestNewSystemOutLoggerCreatesNewSystemOutLogger(t *testing.T) {
