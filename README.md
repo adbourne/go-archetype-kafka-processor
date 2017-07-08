@@ -57,8 +57,6 @@ run using the following command:
 `docker run -it -p8080:8080 adbourne/go-archetype-kafa-processor`
 
 ## Dependency Management
-This project uses the near-to-be-offical [dep](https://github.com/golang/dep) to manage dependencies. This project is currently in
-Alpha status so be aware that it may not always work as intended. That being said, as the convention is to vendor dependencies any
-problems should become apparent rather quickly when running locally.
+This project uses [GoDep](https://github.com/tools/godep).
 
 ##

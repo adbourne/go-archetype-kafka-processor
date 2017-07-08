@@ -4,11 +4,11 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/Shopify/sarama"
 	"github.com/adbourne/go-archetype-kafka-processor/config"
 	"github.com/adbourne/go-archetype-kafka-processor/messages"
 	"log"
 	"time"
+	"gopkg.in/Shopify/sarama.v1"
 )
 
 // KafkaProcessor turns a Source Message into a Sink Message
