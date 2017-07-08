@@ -2,9 +2,10 @@ package processors
 
 import (
 	"fmt"
+	"testing"
 	"github.com/adbourne/go-archetype-kafka-processor/messages"
 	"github.com/stretchr/testify/assert"
-	"testing"
+	"github.com/adbourne/go-archetype-kafka-processor/services"
 )
 
 func TestProcessWithSeedGeneratesARandomNumber(t *testing.T) {
@@ -14,9 +15,7 @@ func TestProcessWithSeedGeneratesARandomNumber(t *testing.T) {
 	mockRandomNumberService := &MockRandomNumberService{}
 	mockRandomNumberService.ExpectSeed(expectedSeed).ThenReturn(mockRandomNumber)
 
-	randomNumberProcessor := RandomNumberProcessor{
-		RandomNumberService: mockRandomNumberService,
-	}
+	randomNumberProcessor := NewRandomNumberProcessor(services.NewSystemOutLogger(), mockRandomNumberService)
 
 	expected := messages.SinkMessage{
 		RandomNumber: mockRandomNumber,

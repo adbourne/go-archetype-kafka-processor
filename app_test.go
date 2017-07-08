@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/adbourne/go-archetype-kafka-processor/config"
+	"github.com/adbourne/go-archetype-kafka-processor/services"
 	"github.com/stretchr/testify/mock"
 	"testing"
 )
@@ -28,11 +29,12 @@ func TestApplicationIsStartedCorrectly(t *testing.T) {
 	MockHTTPServer.AssertExpectations(t)
 }
 
-func newTestAppContext(t *testing.T, mkc *MockKafkaClient, mhs *MockHTTPServer) *config.AppContext {
+func newTestAppContext(t *testing.T, mkc *MockKafkaClient, mhs *MockHTTPServer) *AppContext {
 	appConfig := newTestAppConfig()
 	randomNumberService := newRandomNumberService()
-	return &config.AppContext{
+	return &AppContext{
 		AppConfig:           appConfig,
+		Logger:              newLogger(),
 		RandomNumberService: randomNumberService,
 		KafkaClient:         mkc,
 		KafkaProcessor:      newKafkaProcessor(randomNumberService),
@@ -44,7 +46,7 @@ type MockKafkaClient struct {
 	mock.Mock
 }
 
-func (mkc *MockKafkaClient) RegisterProcessor(kp config.KafkaProcessor) {
+func (mkc *MockKafkaClient) RegisterProcessor(kp services.KafkaProcessor) {
 	mkc.Called(kp)
 }
 
@@ -61,7 +63,7 @@ type MockHTTPServer struct {
 	mock.Mock
 }
 
-func (mhs *MockHTTPServer) RegisterEndpoint(endpoint string, handler config.Handler) {
+func (mhs *MockHTTPServer) RegisterEndpoint(endpoint string, handler services.Handler) {
 	mhs.Called(endpoint, handler)
 }
 

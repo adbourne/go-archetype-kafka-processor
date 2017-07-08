@@ -1,4 +1,4 @@
-package config
+package services
 
 import (
 	"fmt"
@@ -33,15 +33,16 @@ func (dhs DefaultHTTPServer) RegisterEndpoint(endpoint string, handler Handler) 
 }
 
 // Run runs the HTTP server
+// This blocks the thread of execution
 func (dhs DefaultHTTPServer) Run() {
 	dhs.logger.Info(fmt.Sprintf("Starting HTTP server on port '%d'...", dhs.Port))
 	http.ListenAndServe(fmt.Sprintf(":%d", dhs.Port), nil)
 }
 
 // NewDefaultHTTPServer creates a new DefaultHttpServer
-func NewDefaultHTTPServer(port int) *DefaultHTTPServer {
+func NewDefaultHTTPServer(port int, logger Logger) *DefaultHTTPServer {
 	return &DefaultHTTPServer{
-		logger: NewLogger(),
+		logger: logger,
 		Port:   port,
 	}
 }

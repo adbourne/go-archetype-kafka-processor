@@ -16,10 +16,7 @@ func HealthEndpoint(w http.ResponseWriter, r *http.Request) {
 		Status: statusOk,
 	}
 
-	response, err := json.Marshal(appHealth)
-	if err != nil {
-		w.Write([]byte("Oh No!")) // FIXME
-	}
+	response, _ := json.Marshal(appHealth)
 
 	w.Header().Add("Content-Type", "application/json; charset=utf-8")
 	w.Write(response)

@@ -11,6 +11,12 @@ type RandomNumberService interface {
 type DefaultRandomNumberService struct {
 }
 
+// NewDefaultRandomNumberService creates a new DefaultRandomNumberService
+func NewDefaultRandomNumberService() *DefaultRandomNumberService {
+	return &DefaultRandomNumberService{
+	}
+}
+
 // GenerateRandomNumber generates a random number
 func (rns *DefaultRandomNumberService) GenerateRandomNumber(seed int) int {
 	rand.Seed(int64(seed))
