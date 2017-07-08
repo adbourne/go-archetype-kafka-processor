@@ -12,10 +12,7 @@ services:
   - docker
 
 before_install:
- - go get github.com/tools/godep
-
-install:
- - godep restore
+ - go get github.com/fsouza/go-dockerclient
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
