@@ -4,27 +4,27 @@
 package main
 
 import (
-	"log"
 	"fmt"
-	"time"
-	"testing"
-	"net/http"
-	"io/ioutil"
-	"github.com/fsouza/go-dockerclient"
 	"github.com/adbourne/go-archetype-kafka-processor/config"
+	"github.com/fsouza/go-dockerclient"
 	"github.com/stretchr/testify/assert"
+	"io/ioutil"
+	"log"
+	"net/http"
+	"testing"
+	"time"
 )
 
 const (
-	DockerImageNameKafka = "spotify/kafka:latest"
-	KafkaPort = 9092
-	ServerPort = 8080
+	DockerImageNameKafka   = "spotify/kafka:latest"
+	KafkaPort              = 9092
+	ServerPort             = 8080
 	IntegrationSourceTopic = "source-topic"
-	IntegrationSinkTopic = "sink-topic"
+	IntegrationSinkTopic   = "sink-topic"
 )
 
 func TestHealthCheckEndpointReturnsCorrectResponse(t *testing.T) {
-	withKafka(t, func(){
+	withKafka(t, func() {
 		testHTTPGetRequest(t, fmt.Sprintf("http://localhost:%d/health", ServerPort), `{"status":"ok"}`)
 	})
 }
@@ -64,7 +64,7 @@ func withKafka(t *testing.T, testFunc func()) {
 	}()
 
 	// Wait for container to wake up
-	waitStarted(t, dockerClient, kafkaContainer.ID, 5 * time.Second)
+	waitStarted(t, dockerClient, kafkaContainer.ID, 5*time.Second)
 
 	// Inspect the docker container for additional information
 	kafkaContainer, err := dockerClient.InspectContainer(kafkaContainer.ID)
@@ -132,16 +132,16 @@ func kafkaCreateOptions() docker.CreateContainerOptions {
 		"9092/tcp": {{HostIP: "0.0.0.0", HostPort: "9092"}}}
 
 	hostConfig := docker.HostConfig{
-		PortBindings: portBindings,
+		PortBindings:    portBindings,
 		PublishAllPorts: true,
-		Privileged: false,
+		Privileged:      false,
 	}
 
 	opts := docker.CreateContainerOptions{
 		Config: &docker.Config{
 			Image:        DockerImageNameKafka,
 			ExposedPorts: exposedPorts,
-			Env: envVars,
+			Env:          envVars,
 		},
 		HostConfig: &hostConfig,
 	}
@@ -164,5 +164,3 @@ func waitStarted(t *testing.T, client *docker.Client, id string, maxWait time.Du
 	}
 	t.Fatalf(fmt.Sprintf("Cannot start container '%s' for '%v', aborting", id, maxWait))
 }
-
-

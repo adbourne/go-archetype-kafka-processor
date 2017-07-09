@@ -1,16 +1,16 @@
 package main
 
 import (
+	"fmt"
 	"github.com/adbourne/go-archetype-kafka-processor/config"
 	"github.com/adbourne/go-archetype-kafka-processor/contollers"
-	"log"
 	"io/ioutil"
+	"log"
 	"path/filepath"
-	"fmt"
 )
 
 const (
-	BANNER_FILE_NAME = "banner.txt"
+	BANNER_FILE_NAME    = "banner.txt"
 	DEFAULT_BANNER_TEXT = "Kafka Archetype starting..."
 )
 
@@ -59,7 +59,7 @@ func printBanner() {
 	}
 
 	contents, err := ioutil.ReadFile(relativePath)
-	if (err != nil) {
+	if err != nil {
 		log.Println(DEFAULT_BANNER_TEXT)
 		return
 	}
