@@ -24,19 +24,22 @@ type DefaultHTTPServer struct {
 
 	// The port to run on
 	Port int
+
+	// The mux
+	mux *http.ServeMux
 }
 
 // RegisterEndpoint registers a Handler to a specific endpoint
 func (dhs DefaultHTTPServer) RegisterEndpoint(endpoint string, handler Handler) {
 	dhs.logger.Debug(fmt.Sprintf("Registering handler on endpoint '%s'", endpoint))
-	http.HandleFunc(endpoint, handler)
+	dhs.mux.HandleFunc(endpoint, handler)
 }
 
 // Run runs the HTTP server
 // This blocks the thread of execution
 func (dhs DefaultHTTPServer) Run() {
 	dhs.logger.Info(fmt.Sprintf("Starting HTTP server on port '%d'...", dhs.Port))
-	http.ListenAndServe(fmt.Sprintf(":%d", dhs.Port), nil)
+	http.ListenAndServe(fmt.Sprintf(":%d", dhs.Port), dhs.mux)
 }
 
 // NewDefaultHTTPServer creates a new DefaultHttpServer
@@ -44,5 +47,6 @@ func NewDefaultHTTPServer(port int, logger Logger) *DefaultHTTPServer {
 	return &DefaultHTTPServer{
 		logger: logger,
 		Port:   port,
+		mux:    http.NewServeMux(),
 	}
 }
