@@ -59,7 +59,7 @@ func newKafkaClient(appConfig config.AppConfig, logger services.Logger) services
 // Creates a new KafkaProcessor
 func newKafkaProcessor(randomNumberService services.RandomNumberService, logger services.Logger) services.KafkaProcessor {
 	return &processors.RandomNumberProcessor{
-		Logger: logger,
+		Logger:              logger,
 		RandomNumberService: randomNumberService,
 	}
 }

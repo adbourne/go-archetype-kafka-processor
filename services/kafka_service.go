@@ -6,9 +6,9 @@ import (
 	"fmt"
 	"github.com/adbourne/go-archetype-kafka-processor/config"
 	"github.com/adbourne/go-archetype-kafka-processor/messages"
+	"gopkg.in/Shopify/sarama.v1"
 	"log"
 	"time"
-	"gopkg.in/Shopify/sarama.v1"
 )
 
 // KafkaProcessor turns a Source Message into a Sink Message
@@ -99,9 +99,9 @@ func (kc *SaramaKafkaClient) Close() {
 func NewSaramaKafkaClient(appConfig config.AppConfig, logger Logger) *SaramaKafkaClient {
 	return &SaramaKafkaClient{
 		AppConfig: appConfig,
-		Consumer: newSaramaKafkaConsumer(appConfig.GetBrokerList()),
-		Producer: newKafkaProducer(appConfig.GetBrokerList()),
-		Logger:   logger,
+		Consumer:  newSaramaKafkaConsumer(appConfig.GetBrokerList()),
+		Producer:  newKafkaProducer(appConfig.GetBrokerList()),
+		Logger:    logger,
 	}
 }
 
