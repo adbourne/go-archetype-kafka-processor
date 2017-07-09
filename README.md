@@ -57,6 +57,4 @@ run using the following command:
 `docker run -it -p8080:8080 adbourne/go-archetype-kafa-processor`
 
 ## Dependency Management
-This project uses [GoDep](https://github.com/tools/godep).
-
-##
+This project uses [Govendor](https://github.com/kardianos/govendor).

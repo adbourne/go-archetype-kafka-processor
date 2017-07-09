@@ -13,7 +13,6 @@ services:
 
 before_install:
  - docker pull spotify/kafka:latest
- - go get github.com/fsouza/go-dockerclient # This is a pain to vendor due to case-sensitive conflicts on dependency logrus
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
