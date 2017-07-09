@@ -72,7 +72,7 @@ func loadEnvVarAsInt(envVarName string, defaultVal int) int {
 		return defaultVal
 	}
 
-	log.Printf("Environment variable '%s' found", envVarName)
+	log.Printf("Environment variable '%s' found as '%s'", envVarName, ev)
 	return evi
 }
 
@@ -84,6 +84,6 @@ func loadEnvVarAsString(envVarName string, defaultVal string) string {
 		return defaultVal
 	}
 
-	log.Printf("Environment variable '%s' found", envVarName)
+	log.Printf("Environment variable '%s' found as '%s'", envVarName, ev)
 	return ev
 }

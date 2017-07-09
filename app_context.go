@@ -35,8 +35,9 @@ func NewAppContext(appConfig config.AppConfig) *AppContext {
 		AppConfig:           appConfig,
 		RandomNumberService: randomNumberService,
 		KafkaClient:         newKafkaClient(appConfig, logger),
-		KafkaProcessor:      newKafkaProcessor(randomNumberService),
+		KafkaProcessor:      newKafkaProcessor(randomNumberService, logger),
 		HTTPServer:          newHTTPServer(appConfig, logger),
+		Logger:              newLogger(),
 	}
 }
 
@@ -56,8 +57,9 @@ func newKafkaClient(appConfig config.AppConfig, logger services.Logger) services
 }
 
 // Creates a new KafkaProcessor
-func newKafkaProcessor(randomNumberService services.RandomNumberService) services.KafkaProcessor {
-	return processors.RandomNumberProcessor{
+func newKafkaProcessor(randomNumberService services.RandomNumberService, logger services.Logger) services.KafkaProcessor {
+	return &processors.RandomNumberProcessor{
+		Logger: logger,
 		RandomNumberService: randomNumberService,
 	}
 }

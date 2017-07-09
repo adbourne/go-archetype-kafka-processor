@@ -4,9 +4,19 @@ import (
 	"github.com/adbourne/go-archetype-kafka-processor/config"
 	"github.com/adbourne/go-archetype-kafka-processor/contollers"
 	"log"
+	"io/ioutil"
+	"path/filepath"
+	"fmt"
+)
+
+const (
+	BANNER_FILE_NAME = "banner.txt"
+	DEFAULT_BANNER_TEXT = "Kafka Archetype starting..."
 )
 
 func main() {
+	printBanner()
+
 	// Load the application config
 	appConfig := config.NewAppConfig()
 
@@ -21,7 +31,7 @@ func main() {
 func RunApp(appContext *AppContext) {
 	logger := appContext.Logger
 
-	printBanner()
+	logger.Debug(fmt.Sprintf("%+v\n", appContext.AppConfig))
 
 	logger.Info("Starting application...")
 
@@ -42,12 +52,18 @@ func RunApp(appContext *AppContext) {
 }
 
 func printBanner() {
-	log.Println(
-		`
- ___ ___ ___ _____     _          _        _
-| _ \ __/ __|_   _|   /_\  _ _ __| |_  ___| |_ _  _ _ __  ___
-|   / _|\__ \ | |    / _ \| '_/ _| ' \/ -_)  _| || | '_ \/ -_)
-|_|_\___|___/ |_|   /_/ \_\_| \__|_||_\___|\__|\_, | .__/\___|
-                                               |__/|_|
-		`)
+	relativePath, err := filepath.Abs(BANNER_FILE_NAME)
+	if err != nil {
+		log.Println(DEFAULT_BANNER_TEXT)
+		return
+	}
+
+	contents, err := ioutil.ReadFile(relativePath)
+	if (err != nil) {
+		log.Println(DEFAULT_BANNER_TEXT)
+		return
+	}
+
+	log.Println(string(contents))
+
 }

@@ -8,6 +8,7 @@ import (
 // Logger is an abstraction for logging
 // We can use this interface throughout the application and swap out the underlying logging
 // libraries at will
+// TODO: Allow for setting log level
 type Logger interface {
 	Error(msg string)
 

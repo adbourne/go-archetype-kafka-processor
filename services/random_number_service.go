@@ -13,8 +13,7 @@ type DefaultRandomNumberService struct {
 
 // NewDefaultRandomNumberService creates a new DefaultRandomNumberService
 func NewDefaultRandomNumberService() *DefaultRandomNumberService {
-	return &DefaultRandomNumberService{
-	}
+	return &DefaultRandomNumberService{}
 }
 
 // GenerateRandomNumber generates a random number

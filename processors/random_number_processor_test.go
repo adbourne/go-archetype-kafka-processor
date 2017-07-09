@@ -2,10 +2,10 @@ package processors
 
 import (
 	"fmt"
-	"testing"
 	"github.com/adbourne/go-archetype-kafka-processor/messages"
-	"github.com/stretchr/testify/assert"
 	"github.com/adbourne/go-archetype-kafka-processor/services"
+	"github.com/stretchr/testify/assert"
+	"testing"
 )
 
 func TestProcessWithSeedGeneratesARandomNumber(t *testing.T) {

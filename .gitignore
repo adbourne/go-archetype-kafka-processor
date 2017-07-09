@@ -1,5 +1,6 @@
 bin/
-pkg/
 .idea
 *.iml
 coverage.txt
+.DS_Store
+profile.out
