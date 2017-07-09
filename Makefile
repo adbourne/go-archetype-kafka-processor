@@ -5,7 +5,7 @@ clean:
 	rm -rf bin/*; rm -rf pkg/*
 
 build:
-	go install
+	gofmt -s -w .; go vet; go install
 
 test:
 	./scripts/test-recursively.sh

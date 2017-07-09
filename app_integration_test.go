@@ -3,10 +3,13 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/adbourne/go-archetype-kafka-processor/config"
+	"github.com/adbourne/go-archetype-kafka-processor/messages"
 	"github.com/fsouza/go-dockerclient"
 	"github.com/stretchr/testify/assert"
+	"gopkg.in/Shopify/sarama.v1"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -25,6 +28,35 @@ const (
 func TestHealthCheckEndpointReturnsCorrectResponse(t *testing.T) {
 	withKafka(t, func() {
 		testHTTPGetRequest(t, fmt.Sprintf("http://localhost:%d/health", ServerPort), `{"status":"ok"}`)
+	})
+}
+
+func TestMessageIsProcessedCorrectly(t *testing.T) {
+	withKafka(t, func() {
+		brokers := []string{"localhost:9092"}
+		// Send source message
+		saramaConfig := sarama.NewConfig()
+		asyncProducer, _ := sarama.NewAsyncProducer(brokers, saramaConfig)
+		asyncProducer.Input() <- &sarama.ProducerMessage{
+			Topic: SourceTopic,
+			Key:   nil,
+			Value: &messages.SourceMessage{
+				Seed: 1,
+			},
+		}
+
+		// Wait for it to be processed
+		time.Sleep(3 * time.Second)
+
+		// Check the result
+		consumer, _ := sarama.NewConsumer(brokers, nil)
+		partitionConsumer, _ := consumer.ConsumePartition(SinkTopic, 0, 0)
+		sinkMessage := <-partitionConsumer.Messages()
+
+		sinkMessageValue := &messages.SinkMessage{}
+		json.Unmarshal(sinkMessage.Value, sinkMessageValue)
+
+		assert.Equal(t, sinkMessageValue.RandomNumber, 5577006791947779410)
 	})
 }
 
