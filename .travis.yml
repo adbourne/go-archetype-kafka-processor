@@ -12,7 +12,11 @@ services:
   - docker
 
 before_install:
+ - go get -u github.com/kardianos/govendor
  - docker pull spotify/kafka:latest
+
+install:
+  - govendor install
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
