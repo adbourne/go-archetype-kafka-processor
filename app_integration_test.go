@@ -1,4 +1,5 @@
 // +build integration
+
 // These tests make use of Docker, spinning up an Apache Kafka container for integration level tests
 // these tests do not test that the application is packaged correctly after a Docker build
 package main
