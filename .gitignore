@@ -1,5 +1,4 @@
 bin/
-pkg/
 .idea
 *.iml
 coverage.txt
