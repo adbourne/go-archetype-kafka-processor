@@ -26,7 +26,7 @@ getGoCyclo() {
 getGoLint() {
     if [ ! -d "$GOPATH/src/github.com/golang/lint" ]; then
         echo "Getting golint..."
-        local golintPath="github.com/golang/lint"
+        local golintPath="github.com/golang/lint/golint"
         go get "$golintPath"
         go install "$golintPath"
     fi
