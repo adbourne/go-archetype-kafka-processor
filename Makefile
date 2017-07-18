@@ -1,5 +1,5 @@
 #
-default: test
+default: build test
 
 clean:
 	rm -rf bin/*; rm -rf pkg/*

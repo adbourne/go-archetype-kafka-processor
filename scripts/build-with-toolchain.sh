@@ -70,6 +70,7 @@ buildProject() {
         printDefaultColour
         exit $?
     fi
+    printDefaultColour
 
     toolTextBreak "govet"
     printYellow
@@ -79,24 +80,29 @@ buildProject() {
     toolTextBreak "gocyclo"
     printYellow
     for d in $(go list ./... | grep -v vendor); do
-        gocyclo -over 25 "$GOPATH/src/$d"
+        gocyclo -over 25 "$GOPATH/src/$d" | grep -v "/vendor/"
     done
     printDefaultColour
 
     toolTextBreak "golint"
     printYellow
-    golint .
+    for d in $(go list ./... | grep -v vendor); do
+        golint "$d"
+    done
     printDefaultColour
 
     toolTextBreak "ineffassign"
     printYellow
-    ineffassign .
+    for d in $(go list ./... | grep -v vendor); do
+        ineffassign "$GOPATH/src/$d"
+    done
+
     printDefaultColour
 
     toolTextBreak "misspell"
     printYellow
     for d in $(go list ./... | grep -v vendor); do
-        misspell "$GOPATH/src/$d"
+        misspell "$d"
     done
     printDefaultColour
 
