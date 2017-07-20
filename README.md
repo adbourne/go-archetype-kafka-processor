@@ -46,6 +46,30 @@ container rather nicely. For the sake of the archetype, each value has a default
 | `KAFKA_PROCESSOR_ARCHETYPE_SOURCE_TOPIC`  | The topic to get messages from                  | source-topic   |
 | `KAFKA_PROCESSOR_ARCHETYPE_SINK_TOPIC`    | The topic to place messages onto                | sink-topic     |
 
+## Building
+This project uses [make](https://www.gnu.org/software/make/) for building the project. The following make tasks exist:
+```
+# Clean built artefacts
+make clean
+
+# Build the project
+make build
+
+# Run the tests
+make test
+
+# Package as a Docker container
+make package
+```
+
+In addition to performing a `go install`, building the project also runs [gofmt](https://golang.org/cmd/gofmt/), [govet](https://golang.org/cmd/vet/), [gocyclo](https://github.com/fzipp/gocyclo), [golint](https://github.com/golang/lint), [ineffassign](https://github.com/gordonklaus/ineffassign) and [misspell](https://github.com/client9/misspell). The build does not fail if these tools report an error; it is up to the Developer if they take the advice. The vendor folder is excluded from the analysis.
+
+
+## Testing
+The testing library of choice for this project is [Testify](https://github.com/stretchr/testify). Testify is a sturdy, assert style framework. 
+
+In addition to usint tests, this project has integration tests that run against a real instance of Kafka by using the [spotify/kafka](https://hub.docker.com/r/spotify/kafka/) Docker image. The kafka instance is spun up fresh for each integration test and then stopped after.
+
 ## Docker
 The application can be packaged as a Docker container by using the following command:
 
