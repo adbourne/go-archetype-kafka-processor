@@ -23,6 +23,15 @@ getGoCyclo() {
    fi
 }
 
+runGoCyclo() {
+    printYellow
+    for d in $(go list ./... | grep -v vendor); do
+        gocyclo -over 25 "$GOPATH/src/$d" | grep -v "/vendor/"
+    done
+    printDefaultColour
+
+}
+
 getGoLint() {
     if [ ! -d "$GOPATH/src/github.com/golang/lint" ]; then
         echo "Getting golint..."
@@ -30,6 +39,14 @@ getGoLint() {
         go get "$golintPath"
         go install "$golintPath"
     fi
+}
+
+runGoLint() {
+    printYellow
+    for d in $(go list ./... | grep -v vendor); do
+        golint "$d" | grep -v "/vendor/"
+    done
+    printDefaultColour
 }
 
 getIneffassign() {
@@ -41,6 +58,14 @@ getIneffassign() {
     fi
 }
 
+runIneffassign() {
+    printYellow
+    for d in $(go list ./... | grep -v vendor); do
+        ineffassign "$GOPATH/src/$d" | grep -v "/vendor/"
+    done
+    printDefaultColour
+}
+
 getMisspell() {
     if [ ! -d "$GOPATH/src/github.com/client9/misspell/" ]; then
         echo "Getting misspell..."
@@ -50,18 +75,19 @@ getMisspell() {
     fi
 }
 
-toolTextBreak() {
-    printBold
-    echo "$1:"
-    printNormal
+runMisspell() {
+    printYellow
+    for d in $(go list ./... | grep -v vendor); do
+        misspell "$d" | grep -v "/vendor/"
+    done
+    printDefaultColour
 }
-buildProject() {
-    printBold
-    echo "Building project..."
-    printNormal
 
+runGoFmt() {
     gofmt -s -w .
+}
 
+runGoInstall() {
     printYellow
     go install
     if [ $? != 0 ]; then
@@ -71,40 +97,43 @@ buildProject() {
         exit $?
     fi
     printDefaultColour
+}
 
-    toolTextBreak "govet"
+runGoVet() {
     printYellow
     go vet
     printDefaultColour
+}
 
-    toolTextBreak "gocyclo"
-    printYellow
-    for d in $(go list ./... | grep -v vendor); do
-        gocyclo -over 25 "$GOPATH/src/$d" | grep -v "/vendor/"
-    done
-    printDefaultColour
+printToolHeader() {
+    printBold
+    echo "$1"
+    printNormal
+}
 
-    toolTextBreak "golint"
-    printYellow
-    for d in $(go list ./... | grep -v vendor); do
-        golint "$d"
-    done
-    printDefaultColour
+buildProject() {
+    printBold
+    echo "Building project..."
+    printNormal
 
-    toolTextBreak "ineffassign"
-    printYellow
-    for d in $(go list ./... | grep -v vendor); do
-        ineffassign "$GOPATH/src/$d"
-    done
+    runGoFmt
 
-    printDefaultColour
+    runGoInstall
 
-    toolTextBreak "misspell"
-    printYellow
-    for d in $(go list ./... | grep -v vendor); do
-        misspell "$d"
-    done
-    printDefaultColour
+    printToolHeader "govet"
+    runGoVet
+
+    printToolHeader "gocyclo"
+    runGoCyclo
+
+    printToolHeader "golint"
+    runGoLint
+
+    printToolHeader "ineffassign"
+    runIneffassign
+
+    printToolHeader "misspell"
+    runMisspell
 
     printGreen
     echo "Build Complete"
