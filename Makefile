@@ -1,14 +1,14 @@
 #
-default: test
+default: build test
 
 clean:
-	rm -rf bin/*; rm -rf pkg/*
+	rm -rf bin/app
 
 build:
-	gofmt -s -w .; go vet; go install
+	./scripts/build-with-toolchain.sh
 
 test:
 	./scripts/test-recursively.sh
 
 package:
-	CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o bin/app && docker build . -t adbourne/go-archetype-kafka-processor:latest
+	GOOS=linux go build -o bin/app; docker build . -t adbourne/go-archetype-kafka:latest
