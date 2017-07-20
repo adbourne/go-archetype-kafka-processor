@@ -2,7 +2,7 @@
 default: build test
 
 clean:
-	rm -rf bin/*; rm -rf pkg/*
+	rm -rf bin/app
 
 build:
 	./scripts/build-with-toolchain.sh
